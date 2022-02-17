@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.netology.data.Ticket;
+import ru.netology.data.TicketByTimeAscComparator;
 import ru.netology.repository.TicketRepository;
 
 import java.util.Arrays;
@@ -22,7 +23,7 @@ public class TicketManager {
         repository.removeById(id);
     }
 
-    public Ticket[] findAll(String from,String to) {
+    public Ticket[] findAll(String from,String to, TicketByTimeAscComparator comparator) {
         Ticket[] result = new Ticket[0];
         for(Ticket ticket : repository.findAll()) {
             if (ticket.matches(from, to)) {
@@ -32,7 +33,7 @@ public class TicketManager {
                 result = tmp;
             }
         }
-        Arrays.sort(result);
+        Arrays.sort(result, comparator);
         return result;
     }
 }
