@@ -3,6 +3,7 @@ package ru.netology.manager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.Ticket;
+import ru.netology.data.TicketByTimeAscComparator;
 import ru.netology.repository.TicketRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TicketManagerTest {
     private TicketRepository repository = new TicketRepository();
     private TicketManager manager = new TicketManager(repository);
+    private TicketByTimeAscComparator comparator = new TicketByTimeAscComparator();
 
     Ticket first =new Ticket(1, 4993, "DME", "AER", 145);
     Ticket second =new Ticket(2, 4698, "DME", "AER", 140);
@@ -53,26 +55,26 @@ class TicketManagerTest {
     }
 
     @Test
-    void shouldFindVKOAndSortByPrice() {
+    void shouldFindVKOAndSortByTime() {
 
-        assertArrayEquals(new Ticket[]{fifth, third}, manager.findAll("VKO", "AER"));
+        assertArrayEquals(new Ticket[]{third, fifth}, manager.findAll("VKO", "AER", comparator));
     }
 
     @Test
-    void shouldFindSeveralAndSortByPrice() {
+    void shouldFindSeveralAndSortByTime() {
 
-        assertArrayEquals(new Ticket[]{fifth, third, fourth, sixth}, manager.findAll("O", "AER"));
+        assertArrayEquals(new Ticket[]{third, fifth, fourth, sixth}, manager.findAll("O", "AER", comparator));
     }
 
     @Test
     void shouldNotFindIATAWithoutCrash() {
 
-        assertArrayEquals(new Ticket[0], manager.findAll("MOW", "KUF"));
+        assertArrayEquals(new Ticket[0], manager.findAll("MOW", "KUF", comparator));
     }
 
     @Test
-    void shouldNotFindIATAWhenOneNotExistWithoutCrash() {    //Тест написан для 100%-го покрытия по brnch'ам
-        assertArrayEquals(new Ticket[0], manager.findAll("SVO", "KUF"));
+    void shouldNotFindIATAWhenOneNotExistWithoutCrash() {    //Тест написан для 100%-го покрытия по branch'ам
+        assertArrayEquals(new Ticket[0], manager.findAll("SVO", "KUF", comparator));
     }
 
     @Test
@@ -80,7 +82,7 @@ class TicketManagerTest {
         TicketRepository repository1 = new TicketRepository();
         TicketManager manager1 = new TicketManager(repository1);
 
-        assertArrayEquals(new Ticket[0], manager1.findAll("SVO", "AER"));
+        assertArrayEquals(new Ticket[0], manager1.findAll("SVO", "AER", comparator));
     }
 
     @Test
